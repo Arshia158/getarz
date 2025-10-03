@@ -981,7 +981,7 @@
             </div>
             
             <div class="btn-group fade-in">
-                <a href="tg://resolve?domain=ArshiaUs" class="btn btn-primary" onclick="openTelegram()">
+                <a href="#" class="btn btn-primary" onclick="openTelegram()">
                     <i class="fab fa-telegram"></i>
                     تماس از طریق تلگرام
                 </a>
@@ -1008,7 +1008,7 @@
                     <a href="#contact">تماس</a>
                 </div>
                 <div class="social-links">
-                    <a href="tg://resolve?domain=ArshiaUs" onclick="openTelegram()"><i class="fab fa-telegram"></i></a>
+                    <a href="#" onclick="openTelegram()"><i class="fab fa-telegram"></i></a>
                     <a href="#"><i class="fab fa-twitter"></i></a>
                     <a href="#"><i class="fab fa-instagram"></i></a>
                     <a href="#"><i class="fab fa-linkedin"></i></a>
@@ -1071,31 +1071,46 @@
 
         // Function to open Telegram app
         function openTelegram() {
+            // Check if we're in a Sketchware WebView
+            const isSketchwareWebView = /Sketchware/i.test(navigator.userAgent);
+            
             // Check if the device is Android
             const isAndroid = /Android/i.test(navigator.userAgent);
             
             // Check if the device is iOS
             const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
             
-            if (isAndroid) {
-                // For Android, use the tg:// protocol
-                window.location.href = 'tg://resolve?domain=ArshiaUs';
-                
-                // Fallback to the web version if the app is not installed
-                setTimeout(function() {
-                    window.location.href = 'https://t.me/ArshiaUs';
-                }, 500);
-            } else if (isIOS) {
-                // For iOS, use the tg:// protocol
-                window.location.href = 'tg://resolve?domain=ArshiaUs';
-                
-                // Fallback to the web version if the app is not installed
-                setTimeout(function() {
-                    window.location.href = 'https://t.me/ArshiaUs';
-                }, 500);
+            if (isSketchwareWebView) {
+                // If we're in Sketchware WebView, try to open Telegram using intent
+                if (isAndroid) {
+                    // For Android in Sketchware WebView
+                    window.location.href = 'intent://resolve?domain=ArshiaUs#Intent;scheme=tg;package=org.telegram.messenger;end;';
+                } else if (isIOS) {
+                    // For iOS in Sketchware WebView
+                    window.location.href = 'tg://resolve?domain=ArshiaUs';
+                }
             } else {
-                // For other devices, open the web version
-                window.open('https://t.me/ArshiaUs', '_blank');
+                // If we're not in Sketchware WebView, use standard approach
+                if (isAndroid) {
+                    // For Android, use the tg:// protocol
+                    window.location.href = 'tg://resolve?domain=ArshiaUs';
+                    
+                    // Fallback to the web version if the app is not installed
+                    setTimeout(function() {
+                        window.location.href = 'https://t.me/ArshiaUs';
+                    }, 500);
+                } else if (isIOS) {
+                    // For iOS, use the tg:// protocol
+                    window.location.href = 'tg://resolve?domain=ArshiaUs';
+                    
+                    // Fallback to the web version if the app is not installed
+                    setTimeout(function() {
+                        window.location.href = 'https://t.me/ArshiaUs';
+                    }, 500);
+                } else {
+                    // For other devices, open the web version
+                    window.open('https://t.me/ArshiaUs', '_blank');
+                }
             }
             
             // Prevent default link behavior
